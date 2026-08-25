@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'cubits/home_cubit/home_cubit.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  var isshow = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF242A32),
-
       appBar: AppBar(
         backgroundColor: const Color(0xFF242A32),
         elevation: 0,
@@ -20,40 +28,55 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: InputDecoration(
-                hintText: 'Search',
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                ),
-                suffixIcon: const Icon(
-                  Icons.search,
-                  color: Colors.grey,
-                ),
-                filled: true,
-                fillColor: const Color(0xFF343A40),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(
-                    color: Colors.orange,
-                    width: 2,
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    hintStyle: const TextStyle(
+                      color: Colors.grey,
+                    ),
+                    suffixIcon: const Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFF343A40),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.orange,
+                        width: 2,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.orange,
+                        width: 2,
+                      ),
+                    ),
                   ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: const BorderSide(
-                    color: Colors.orange,
-                    width: 2,
-                  ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    isshow!=isshow;
+                    isshow=!isshow;
+                    context.read<HomeCubit>().greet();
+                    },
+                  child: const Text('Get Started'),
                 ),
-              ),
-            ),
-          ],
+                SizedBox(height: 40,),
+                if (isshow)
+                  const Text('🥳🥳'),
+              ],
+            );
+          },
         ),
       ),
     );
