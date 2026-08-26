@@ -74,6 +74,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 40,),
                 if (isshow)
                   const Text('🥳🥳'),
+
+                Expanded(
+                  child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return Image.network(
+                        'https://www.impawards.com/2022/posters/batman.jpg',
+                        height: 150,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: 20);
+                    },
+                    itemCount: 10,
+                  ),
+                ),
               ],
             );
           },
