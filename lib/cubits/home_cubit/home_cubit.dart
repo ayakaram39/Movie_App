@@ -10,7 +10,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(HomeDisplayGreet());
   }
 
-  void  getCarouselView() {
-    emit(HomeDisplayGreet());
+  void  getCarouselMovies() {
+    emit(HomeCarouselMovieLoading());
   }
 }
