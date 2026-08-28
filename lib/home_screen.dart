@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState(){
-    return context.read<HomeCarouselMovieLoading>().;
+    return context.read<HomeCubit>().getCarouselMovies();
     return initState();
   }
   @override
