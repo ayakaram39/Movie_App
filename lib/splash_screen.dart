@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'home_screen.dart';
 import 'cubits/home_cubit/home_cubit.dart';
+import 'cubits/Now_playing_cubits/now_playing_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,8 +20,15 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => HomeCubit(),
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => HomeCubit(),
+              ),
+              BlocProvider(
+                create: (context) => NowPlayingCubit(),
+              ),
+            ],
             child: const HomeScreen(),
           ),
         ),
