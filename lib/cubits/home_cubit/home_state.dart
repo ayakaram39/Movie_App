@@ -9,7 +9,7 @@ final class HomeDisplayGreet extends HomeState {}
 
 final class HomeCarouselMovieLoading extends HomeState {}
 final class HomeCarouselMovieSuccess extends HomeState {
-  final movies;
+  final dynamic movies;
 
   HomeCarouselMovieSuccess({
     required this.movies,

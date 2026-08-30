@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubits/home_cubit/home_cubit.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
+// import 'cubits/home_cubit/home_state.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -15,8 +15,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState(){
-    return context.read<HomeCubit>().getCarouselMovies();
-    return initState();
+    super.initState();
+ context.read<HomeCubit>().getCarouselMovies();
   }
   @override
   Widget build(BuildContext context) {
@@ -82,26 +82,23 @@ class _HomeScreenState extends State<HomeScreen> {
             //   const Text('🥳🥳'),
 
             BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
+              builder: (context, state){
                 if(state is HomeCarouselMovieLoading){
                   return CircularProgressIndicator();
 
                 }
+                if(state is HomeCarouselMovieSuccess){
+                  var movies = state.movies;
                 return SizedBox(
                   width: double.infinity,
                   height: 210,
                   child: CarouselSlider(
-                    items: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          'https://www.impawards.com/2022/posters/batman.jpg',
-                          width: 140,
-                          height: 210,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
+                    items: movies.map<Widget>((movie) {
+                      return Image.network(
+                        'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                        fit: BoxFit.cover,
+                      );
+                    }).toList(),
                     options: CarouselOptions(
                       height: 210,
                       viewportFraction: 0.4,
@@ -111,8 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 );
+                }
+                return const SizedBox();
               },
-            ),
+                ),
           ],
         ),
       ),
