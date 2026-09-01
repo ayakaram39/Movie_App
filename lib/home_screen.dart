@@ -1,13 +1,11 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
+import 'movie_details_screen.dart';
 import 'cubits/home_cubit/home_cubit.dart';
-import 'cubits/Now_playing_cubits/now_playing_cubit.dart';
+import 'cubits/now_playing_cubits/now_playing_cubit.dart';
 import 'cubits/upcoming/upcoming_cubit.dart';
 import 'cubits/top_rated/toprated_cubit.dart';
-import 'models/carousal_movies_model.dart';
-import 'movie_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,15 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int selectedTab = 0;
-
-  final List<String> tabs = [
-    'Now playing',
-    'Upcoming',
-    'Top rated',
-    'Popular',
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -38,280 +27,225 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xff242A32),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        backgroundColor: const Color(0xFF242A32),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
 
-              const Text(
-                'What do you want to watch?',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              Container(
-                height: 45,
-                decoration: BoxDecoration(
-                  color: const Color(0xff3A3F47),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const TextField(
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: TextStyle(
-                      color: Color(0xff8D8D92),
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Color(0xff8D8D92),
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 12),
+                const Text(
+                  'What do you want to watch?',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-              BlocBuilder<HomeCubit, HomeState>(
-                builder: (context, state) {
-                  if (state is HomeCarouselMovieLoading) {
-                    return const SizedBox(
-                      height: 220,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
+                TextFormField(
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    hintStyle: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                    suffixIcon: const Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFF343A40),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
 
-                  if (state is HomeCarouselMovieSuccess) {
-                    final movies = state.movies;
+                const SizedBox(height: 24),
 
-                    return SizedBox(
-                      height: 220,
-                      child: CarouselSlider.builder(
-                        itemCount: movies.length,
-                        itemBuilder: (context, index, realIndex) {
-                          final movie = movies[index];
-
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      MovieDetailsScreen(movie: movie),
-                                ),
-                              );
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                                errorBuilder:
-                                    (context, error, stackTrace) {
-                                  return Container(
-                                    color: const Color(0xff3A3F47),
-                                    child: const Icon(
-                                      Icons.movie,
-                                      color: Colors.white,
-                                      size: 40,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                        options: CarouselOptions(
-                          height: 210,
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          viewportFraction: 0.4,
-                          autoPlayInterval:
-                          const Duration(seconds: 3),
-                        ),
-                      ),
-                    );
-                  }
-
-                  if (state is HomeCarouselMovieFailure) {
-                    return SizedBox(
-                      height: 220,
-                      child: Center(
-                        child: Text(
-                          state.message,
-                          style: const TextStyle(
-                            color: Colors.red,
+                BlocBuilder<HomeCubit, HomeState>(
+                  builder: (context, state) {
+                    if (state is HomeCarouselMovieLoading) {
+                      return const SizedBox(
+                        height: 210,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFF0296E5),
                           ),
                         ),
-                      ),
-                    );
-                  }
+                      );
+                    }
 
-                  return const SizedBox(
-                    height: 220,
-                  );
-                },
-              ),
+                    if (state is HomeCarouselMovieSuccess) {
+                      final movies = state.movies;
 
-              const SizedBox(height: 15),
-
-              SizedBox(
-                height: 40,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: tabs.length,
-                  itemBuilder: (context, index) {
-                    final isSelected = selectedTab == index;
-
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedTab = index;
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 25),
-                        child: Column(
-                          children: [
-                            Text(
-                              tabs[index],
-                              style: TextStyle(
-                                color: isSelected
-                                    ? Colors.white
-                                    : const Color(0xff8D8D92),
-                                fontSize: 12,
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
+                      return SizedBox(
+                        width: double.infinity,
+                        height: 210,
+                        child: CarouselSlider(
+                          items: movies.map<Widget>((movie) {
+                            return GestureDetector(
+                              onTap: () {
+                                // Open Details Screen here
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder:
+                                      (context, error, stackTrace) {
+                                    return Container(
+                                      color: const Color(0xFF343A40),
+                                      child: const Icon(
+                                        Icons.movie,
+                                        color: Colors.grey,
+                                        size: 40,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            if (isSelected)
-                              Container(
-                                width: 40,
-                                height: 2,
-                                color: const Color(0xff0296E5),
-                              ),
-                          ],
+                            );
+                          }).toList(),
+                          options: CarouselOptions(
+                            height: 210,
+                            viewportFraction: 0.42,
+                            enlargeCenterPage: true,
+                            enlargeFactor: 0.25,
+                            autoPlay: true,
+                            autoPlayInterval:
+                            const Duration(seconds: 3),
+                            autoPlayAnimationDuration:
+                            const Duration(milliseconds: 800),
+                          ),
                         ),
-                      ),
+                      );
+                    }
+
+                    if (state is HomeCarouselMovieFailure) {
+                      return const SizedBox(
+                        height: 210,
+                        child: Center(
+                          child: Text(
+                            'Failed to load movies',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    return const SizedBox(
+                      height: 210,
                     );
                   },
                 ),
-              ),
 
-              const SizedBox(height: 10),
+                const SizedBox(height: 20),
 
-              Expanded(
-                child: _buildSelectedMovies(),
-              ),
-            ],
+                const TabBar(
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.start,
+                  indicatorColor: Color(0xFF0296E5),
+                  indicatorSize: TabBarIndicatorSize.label,
+                  dividerColor: Colors.transparent,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.grey,
+                  labelStyle: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    fontSize: 12,
+                  ),
+                  tabs: [
+                    Tab(
+                      text: 'Now playing',
+                    ),
+                    Tab(
+                      text: 'Upcoming',
+                    ),
+                    Tab(
+                      text: 'Top rated',
+                    ),
+                    Tab(
+                      text: 'Popular',
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 15),
+
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      _buildNowPlaying(),
+                      _buildUpcoming(),
+                      _buildTopRated(),
+                      _buildPopular(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildSelectedMovies() {
-    if (selectedTab == 0) {
-      return BlocBuilder<NowPlayingCubit, NowPlayingState>(
-        builder: (context, state) {
-          if (state is NowPlayingLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (state is NowPlayingSuccess) {
-            return _buildMovieGrid(state.movies);
-          }
-
-          if (state is NowPlayingFailure) {
-            return Center(
-              child: Text(
-                state.message,
-                style: const TextStyle(color: Colors.red),
-              ),
-            );
-          }
-
-          return const SizedBox();
-        },
-      );
-    }
-
-    if (selectedTab == 1) {
-      return BlocBuilder<UpcomingCubit, UpcomingState>(
-        builder: (context, state) {
-          if (state is UpcomingLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (state is UpcomingSuccess) {
-            return _buildMovieGrid(state.movies);
-          }
-
-          if (state is UpcomingFailure) {
-            return Center(
-              child: Text(
-                state.message,
-                style: const TextStyle(color: Colors.red),
-              ),
-            );
-          }
-
-          return const SizedBox();
-        },
-      );
-    }
-
-    if (selectedTab == 2) {
-      return BlocBuilder<TopRatedCubit, TopRatedState>(
-        builder: (context, state) {
-          if (state is TopRatedLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (state is TopRatedSuccess) {
-            return _buildMovieGrid(state.movies);
-          }
-
-          if (state is TopRatedFailure) {
-            return Center(
-              child: Text(
-                state.message,
-                style: const TextStyle(color: Colors.red),
-              ),
-            );
-          }
-
-          return const SizedBox();
-        },
-      );
-    }
-
-    return BlocBuilder<HomeCubit, HomeState>(
+  Widget _buildNowPlaying() {
+    return BlocBuilder<NowPlayingCubit, NowPlayingState>(
       builder: (context, state) {
-        if (state is HomeCarouselMovieSuccess) {
+        if (state is NowPlayingLoading) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFF0296E5),
+            ),
+          );
+        }
+
+        if (state is NowPlayingFailure) {
+          return Center(
+            child: Text(
+              state.message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          );
+        }
+
+        if (state is NowPlayingSuccess) {
           return _buildMovieGrid(state.movies);
         }
 
@@ -320,28 +254,99 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildMovieGrid(List<MovieModel> movies) {
-    return GridView.builder(
-      padding: const EdgeInsets.only(top: 10, bottom: 20),
-      itemCount: movies.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 15,
-        childAspectRatio: 0.58,
+  Widget _buildUpcoming() {
+    return BlocBuilder<UpcomingCubit, UpcomingState>(
+      builder: (context, state) {
+        if (state is UpcomingLoading) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFF0296E5),
+            ),
+          );
+        }
+
+        if (state is UpcomingFailure) {
+          return Center(
+            child: Text(
+              state.message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          );
+        }
+
+        if (state is UpcomingSuccess) {
+          return _buildMovieGrid(state.movies);
+        }
+
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget _buildTopRated() {
+    return BlocBuilder<TopRatedCubit, TopRatedState>(
+      builder: (context, state) {
+        if (state is TopRatedLoading) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFF0296E5),
+            ),
+          );
+        }
+
+        if (state is TopRatedFailure) {
+          return Center(
+            child: Text(
+              state.message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          );
+        }
+
+        if (state is TopRatedSuccess) {
+          return _buildMovieGrid(state.movies);
+        }
+
+        return const SizedBox();
+      },
+    );
+  }
+
+  Widget _buildPopular() {
+    return const Center(
+      child: Text(
+        'Popular',
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
+    );
+  }
+
+  Widget _buildMovieGrid(List movies) {
+    return GridView.builder(
+      padding: const EdgeInsets.only(bottom: 20),
+      physics: const BouncingScrollPhysics(),
+      gridDelegate:
+      const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 15,
+        childAspectRatio: 0.62,
+      ),
+      itemCount: movies.length,
       itemBuilder: (context, index) {
         final movie = movies[index];
 
         return GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    MovieDetailsScreen(movie: movie),
-              ),
-            );
+            // Open Details Screen here
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
@@ -350,10 +355,11 @@ class _HomeScreenState extends State<HomeScreen> {
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return Container(
-                  color: const Color(0xff3A3F47),
+                  color: const Color(0xFF343A40),
                   child: const Icon(
                     Icons.movie,
-                    color: Colors.white,
+                    color: Colors.grey,
+                    size: 35,
                   ),
                 );
               },
