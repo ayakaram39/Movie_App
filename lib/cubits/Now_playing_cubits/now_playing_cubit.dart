@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:dio/dio.dart';
-import 'package:movie_nti_aug/models/carousal_movies_model.dart';
 import 'package:movie_nti_aug/models/now_playing_model.dart';
 
 part 'now_playing_state.dart';
+
 
 class NowPlayingCubit extends Cubit<NowPlayingState> {
   NowPlayingCubit() : super(NowPlayingInitial());
@@ -26,7 +26,7 @@ class NowPlayingCubit extends Cubit<NowPlayingState> {
       );
 
       var nowPlayingMovies =
-      CarouselMoviesResponse.fromJson(res.data);
+      NowPlayingResponse.fromJson(res.data);
 
       print(nowPlayingMovies.results.length);
 
