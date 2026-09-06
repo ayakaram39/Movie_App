@@ -5,10 +5,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:movie_nti_aug/cubits/cast_cubits/cast_cubit.dart';
 import 'package:movie_nti_aug/cubits/review_cubits/reviews_cubit.dart';
 import 'package:movie_nti_aug/cubits/search_cubits/search_cubit.dart';
-
 import 'package:movie_nti_aug/cubits/popular_cubit/popular_cubit.dart';
 import 'package:movie_nti_aug/cubits/popular_cubit/popular_state.dart';
-
+import 'package:movie_nti_aug/models/carousal_movies_model.dart';
+import 'package:movie_nti_aug/models/popular_model.dart';
 import 'package:movie_nti_aug/view/ui_screens/search_screen.dart';
 import 'movie_details_screen.dart';
 
@@ -36,19 +36,37 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<PopularCubit>().getPopularMovies();
   }
 
-  void _openMovieDetails(dynamic movie) {
+  MovieModel _popularToMovieModel(PopularMovieModel movie) {
+    return MovieModel(
+      adult: movie.adult,
+      backdropPath: movie.backdropPath,
+      genreIds: movie.genreIds,
+      id: movie.id,
+      title: movie.title,
+      originalLanguage: movie.originalLanguage,
+      originalTitle: movie.originalTitle,
+      overview: movie.overview,
+      popularity: movie.popularity,
+      posterPath: movie.posterPath,
+      releaseDate: movie.releaseDate,
+      softcore: false,
+      video: movie.video,
+      voteAverage: movie.voteAverage,
+      voteCount: movie.voteCount,
+    );
+  }
+
+  void _openMovieDetails(MovieModel movie) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) =>
-              ReviewsCubit()..getReviews(movie.id),
+              create: (context) => ReviewsCubit()..getReviews(movie.id),
             ),
             BlocProvider(
-              create: (context) =>
-              CastCubit()..getCast(movie.id),
+              create: (context) => CastCubit()..getCast(movie.id),
             ),
           ],
           child: MovieDetailsScreen(
@@ -72,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-
                 const Text(
                   'What do you want to watch?',
                   style: TextStyle(
@@ -81,9 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -134,9 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
-
                 BlocBuilder<HomeCubit, HomeState>(
                   builder: (context, state) {
                     if (state is HomeCarouselMovieLoading) {
@@ -163,8 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 _openMovieDetails(movie);
                               },
                               child: ClipRRect(
-                                borderRadius:
-                                BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10),
                                 child: Image.network(
                                   'https://image.tmdb.org/t/p/w500${movie.posterPath}',
                                   width: double.infinity,
@@ -172,8 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   errorBuilder:
                                       (context, error, stackTrace) {
                                     return Container(
-                                      color:
-                                      const Color(0xFF343A40),
+                                      color: const Color(0xFF343A40),
                                       child: const Icon(
                                         Icons.movie,
                                         color: Colors.grey,
@@ -224,9 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
-
                 const SizedBox(height: 15),
-
                 const TabBar(
                   isScrollable: true,
                   tabAlignment: TabAlignment.start,
@@ -243,23 +252,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 12,
                   ),
                   tabs: [
-                    Tab(
-                      text: 'Now playing',
-                    ),
-                    Tab(
-                      text: 'Upcoming',
-                    ),
-                    Tab(
-                      text: 'Top rated',
-                    ),
-                    Tab(
-                      text: 'Popular',
-                    ),
+                    Tab(text: 'Now playing'),
+                    Tab(text: 'Upcoming'),
+                    Tab(text: 'Top rated'),
+                    Tab(text: 'Popular'),
                   ],
                 ),
-
                 const SizedBox(height: 10),
-
                 Expanded(
                   child: TabBarView(
                     children: [
@@ -455,7 +454,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
               return GestureDetector(
                 onTap: () {
-                  _openMovieDetails(movie);
+                  final movieModel = _popularToMovieModel(movie);
+                  _openMovieDetails(movieModel);
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_nti_aug/models/carousal_movies_model.dart';
+import 'package:movie_nti_aug/models/popular_model.dart';
 import 'package:movie_nti_aug/cubits/review_cubits/reviews_cubit.dart';
 import 'package:movie_nti_aug/cubits/cast_cubits/cast_cubit.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
-  final MovieModel movie;
+  final Object movie;
 
   const MovieDetailsScreen({
     super.key,
@@ -17,7 +18,35 @@ class MovieDetailsScreen extends StatefulWidget {
 }
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
-  MovieModel get movie => widget.movie;
+  MovieModel get movie {
+    if (widget.movie is MovieModel) {
+      return widget.movie as MovieModel;
+    }
+
+    if (widget.movie is PopularMovieModel) {
+      final popularMovie = widget.movie as PopularMovieModel;
+
+      return MovieModel(
+        adult: popularMovie.adult,
+        backdropPath: popularMovie.backdropPath,
+        genreIds: popularMovie.genreIds,
+        id: popularMovie.id,
+        title: popularMovie.title,
+        originalLanguage: popularMovie.originalLanguage,
+        originalTitle: popularMovie.originalTitle,
+        overview: popularMovie.overview,
+        popularity: popularMovie.popularity,
+        posterPath: popularMovie.posterPath,
+        releaseDate: popularMovie.releaseDate,
+        softcore: false,
+        video: popularMovie.video,
+        voteAverage: popularMovie.voteAverage,
+        voteCount: popularMovie.voteCount,
+      );
+    }
+
+    throw Exception('Unsupported movie type');
+  }
 
   String get title => movie.title;
 
@@ -147,7 +176,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               ],
             ),
           ),
-
           Positioned(
             left: 16,
             bottom: 20,
@@ -172,7 +200,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               ),
             ),
           ),
-
           Positioned(
             left: width < 360 ? 100 : 115,
             right: 16,
@@ -191,9 +218,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
                 Wrap(
                   spacing: 8,
                   runSpacing: 5,
@@ -429,9 +454,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             size: 24,
           ),
         ),
-
         const SizedBox(width: 10),
-
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -446,9 +469,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-
               const SizedBox(height: 5),
-
               Text(
                 content,
                 maxLines: 5,
@@ -459,9 +480,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   height: 1.5,
                 ),
               ),
-
               const SizedBox(height: 5),
-
               if (rating != null)
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -597,9 +616,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               size: 28,
             ),
           ),
-
           const SizedBox(width: 10),
-
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -615,9 +632,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
                 const SizedBox(height: 3),
-
                 Text(
                   character,
                   maxLines: 1,

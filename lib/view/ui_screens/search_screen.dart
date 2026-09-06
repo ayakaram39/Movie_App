@@ -3,10 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_nti_aug/cubits/search_cubits/search_cubit.dart';
 import 'package:movie_nti_aug/cubits/search_cubits/search_state.dart';
 import 'package:movie_nti_aug/models/search_model.dart';
+import 'package:movie_nti_aug/view/ui_screens/home_screen.dart';
+import 'package:movie_nti_aug/view/ui_screens/nav_screen.dart';
 import 'package:movie_nti_aug/view/widgets/search_card.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final bool fromNavigation;
+
+  const SearchScreen({
+    super.key,
+    this.fromNavigation = false,
+  });
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();

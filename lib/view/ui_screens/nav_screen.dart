@@ -42,7 +42,7 @@ class _NavScreenState extends State<NavScreen> {
           index: index,
           children: const [
             HomeScreen(),
-            SearchScreen(),
+            SearchScreen(fromNavigation: true),
             WatchListScreen(),
           ],
         ),
