@@ -1,16 +1,44 @@
-# movie_nti_aug
+# 🎬 Movie App
 
-A new Flutter project.
+A Flutter movie application that allows users to discover movies, search for movies, view movie details, and manage their personal watch list.
 
-## Getting Started
+## ✨ Features
 
-This project is a starting point for a Flutter application.
+- 🎬 Splash Screen
+- 🏠 Home Screen
+- 🔥 Now Playing Movies
+- 🎞️ Upcoming Movies
+- ⭐ Top Rated Movies
+- 🔥 Popular Movies
+- 🔍 Search Movies
+- 📖 Movie Details
+- ❤️ Add and Remove Movies from Watch List
+- 💾 Persistent Watch List using SharedPreferences
+- 👤 Guest Session Management
+- 🌐 Real-time movie data using TMDB API
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Technologies Used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter
+- Dart
+- BLoC / Cubit
+- Dio
+- TMDB API
+- SharedPreferences
+- REST API
+- JSON
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📱 Main Screens
+
+- Splash Screen
+- Home Screen
+- Search Screen
+- Movie Details
+- Watch List
+
+## 🚀 Getting Started
+
+### Clone the repository
+
+```bash
+git clone https://github.com/ayakaram39/Movie_App.git
